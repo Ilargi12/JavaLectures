@@ -6,8 +6,6 @@ import agh.cs.lab2.Vector2d;
 import agh.cs.lab3.Animal;
 import agh.cs.lab5.GrassField;
 
-import java.io.FileNotFoundException;
-
 public class World {
     public static void main(String[] args) {
         try {

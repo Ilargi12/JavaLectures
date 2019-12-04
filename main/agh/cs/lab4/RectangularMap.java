@@ -2,11 +2,7 @@
 package agh.cs.lab4;
 
 import agh.cs.lab2.*;
-import agh.cs.lab3.*;
 import agh.cs.lab5.AbstractWorldMap;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class RectangularMap extends AbstractWorldMap {
 

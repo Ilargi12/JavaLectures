@@ -12,7 +12,7 @@ public class Animal implements IWorldMapElement {
     private MapDirection direction;
     private Vector2d position;
     private IWorldMap map;
-    List<IPositionChangeObserver> observers = new ArrayList<>();
+    private List<IPositionChangeObserver> observers = new ArrayList<>();
 
 
     public Animal(){
@@ -72,12 +72,16 @@ public class Animal implements IWorldMapElement {
                 break;
             case FORWARD:
                 if(map.canMoveTo(this.position.add(wersor))){
+                    Vector2d oldPosition = this.position;
                     this.position = this.position.add(wersor);
+                    this.positionChangedAnimal(oldPosition,this.position);
                 }
                 break;
             case BACKWARD:
                 if (map.canMoveTo(this.position.substract(wersor))){
+                    Vector2d oldPosition = this.position;
                     this.position = this.position.substract(wersor);
+                    this.positionChangedAnimal(oldPosition,this.position);
                 }
                 break;
             default:
@@ -86,10 +90,16 @@ public class Animal implements IWorldMapElement {
     }
 
     void addObserver(IPositionChangeObserver observer){
-        observers.add(observer);
+        this.observers.add(observer);
     }
 
     void removeObserver(IPositionChangeObserver observer){
-        observers.remove(observer);
+        this.observers.remove(observer);
+    }
+
+    void positionChangedAnimal(Vector2d oldPosition, Vector2d newPosition){
+        for (IPositionChangeObserver x: observers){
+            x.positionChanged(oldPosition,newPosition);
+        }
     }
 }

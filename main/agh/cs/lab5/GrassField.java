@@ -3,22 +3,18 @@ package agh.cs.lab5;
 import agh.cs.lab2.MoveDirection;
 import agh.cs.lab2.Vector2d;
 import agh.cs.lab3.Animal;
-import agh.cs.lab4.IWorldMap;
-import agh.cs.lab4.MapVisualizer;
+import agh.cs.lab7.MapBoundary;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.Random;
-import java.math.*;
 
-import static java.lang.Math.random;
 import static java.lang.Math.sqrt;
 
 public class GrassField extends AbstractWorldMap {
     private Vector2d lowerLeft = null;
     private Vector2d upperRight = null;
     private Integer numberOfFields;
+    private MapBoundary boundries = new MapBoundary();
+
 
     public GrassField(Integer numberOfFields) {
         this.numberOfFields = numberOfFields;
@@ -39,13 +35,14 @@ public class GrassField extends AbstractWorldMap {
             if(!isOccupied(field)){
                 Grass brandNewGrass = new Grass(field);
                 weeds.put(brandNewGrass.getPosition(),brandNewGrass);
+                boundries.addToSet(brandNewGrass.getPosition());
                 return;
             }
         }
 
     }
 
-    @Override
+    /*@Override
     protected Vector2d assignLowerLeft() {
         for (Map.Entry<Vector2d,Animal> entry: animals.entrySet()){
             lowerLeft = entry.getValue().getPosition().lowerLeft(lowerLeft);
@@ -54,9 +51,14 @@ public class GrassField extends AbstractWorldMap {
             lowerLeft = entry.getValue().getPosition().lowerLeft(lowerLeft);
         }
         return lowerLeft;
-    }
+    }*/
 
     @Override
+    protected Vector2d assignLowerLeft() {
+        return boundries.bottomLeft();
+    }
+
+    /*@Override
     protected Vector2d assignUpperRight() {
         for (Map.Entry<Vector2d,Animal> entry: animals.entrySet()){
             upperRight = entry.getValue().getPosition().upperRight(upperRight);
@@ -65,9 +67,14 @@ public class GrassField extends AbstractWorldMap {
             upperRight = entry.getValue().getPosition().upperRight(upperRight);
         }
         return upperRight;
-    }
+    }*/
 
     @Override
+    protected Vector2d assignUpperRight(){
+        return boundries.upperRight();
+    }
+
+    /*@Override
     public void run(MoveDirection[] directions) {
         Animal[] tmpAnimals = animals.values().toArray(new Animal[0]);
         for(int i= 0; i < directions.length; i++){
@@ -83,10 +90,39 @@ public class GrassField extends AbstractWorldMap {
                 placeGrass();
             }
         }
+    }*/
 
+    @Override
+    public void run(MoveDirection[] directions) {
+        Animal[] tmpAnimals = animals.values().toArray(new Animal[0]);
+        for(int i= 0; i < directions.length; i++){
+            int index = i%tmpAnimals.length;
+            animals.remove(tmpAnimals[index].getPosition());
+            tmpAnimals[index].move(directions[i]);
+            animals.put(tmpAnimals[index].getPosition(),tmpAnimals[index]);
+
+            Vector2d cowPosition = tmpAnimals[index].getPosition();
+
+            if(getThatGrass(cowPosition) != null){
+                weeds.remove(getThatGrass(cowPosition).getPosition());
+                boundries.removeFromSet(getThatGrass(cowPosition).getPosition());
+                placeGrass();
+            }
+        }
     }
 
     private Grass getThatGrass(Vector2d position){
         return weeds.get(position);
+    }
+
+    @Override
+    public void positionChanged(Vector2d oldPosition, Vector2d newPosition){ //positionChanged with eating grass
+        super.positionChanged(oldPosition,newPosition);
+
+        if(getThatGrass(newPosition) != null){//zjadanie trawy
+            weeds.remove(getThatGrass(newPosition).getPosition());
+            boundries.removeFromSet(newPosition);
+            placeGrass();
+        }
     }
 }
