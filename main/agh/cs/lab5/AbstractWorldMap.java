@@ -6,6 +6,7 @@ import agh.cs.lab3.Animal;
 import agh.cs.lab4.IWorldMap;
 import agh.cs.lab4.MapVisualizer;
 import agh.cs.lab7.IPositionChangeObserver;
+import agh.cs.lab7.MapBoundary;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -13,6 +14,7 @@ import java.util.Map;
 public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
     protected Map<Vector2d,Animal> animals = new LinkedHashMap<>();
     protected Map<Vector2d,Grass> weeds = new LinkedHashMap<>();
+    protected MapBoundary boundries = new MapBoundary();
 
     protected abstract Vector2d assignLowerLeft();
 
@@ -35,6 +37,8 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     public boolean place(Animal animal) {
         if(canMoveTo(animal.getPosition())){
             animals.put(animal.getPosition(),animal);
+            animal.addObserver(this);
+            animal.addObserver(boundries);
             return true;
         }
         else
@@ -63,12 +67,5 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
             return animals.get(position);
 
         return weeds.get(position);
-    }
-
-    @Override
-    public void positionChanged(Vector2d oldPosition, Vector2d newPosition) {
-        Animal tmpAnimal = animals.get(oldPosition);
-        animals.remove(oldPosition);
-        animals.put(newPosition,tmpAnimal);
     }
 }

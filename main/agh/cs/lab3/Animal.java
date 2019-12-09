@@ -74,14 +74,14 @@ public class Animal implements IWorldMapElement {
                 if(map.canMoveTo(this.position.add(wersor))){
                     Vector2d oldPosition = this.position;
                     this.position = this.position.add(wersor);
-                    this.positionChangedAnimal(oldPosition,this.position);
+                    this.notifyObserversThatPositionChanged(oldPosition,this.position);
                 }
                 break;
             case BACKWARD:
                 if (map.canMoveTo(this.position.substract(wersor))){
                     Vector2d oldPosition = this.position;
                     this.position = this.position.substract(wersor);
-                    this.positionChangedAnimal(oldPosition,this.position);
+                    this.notifyObserversThatPositionChanged(oldPosition,this.position);
                 }
                 break;
             default:
@@ -89,15 +89,15 @@ public class Animal implements IWorldMapElement {
         }
     }
 
-    void addObserver(IPositionChangeObserver observer){
+    public void addObserver(IPositionChangeObserver observer){
         this.observers.add(observer);
     }
 
-    void removeObserver(IPositionChangeObserver observer){
+    public void removeObserver(IPositionChangeObserver observer){
         this.observers.remove(observer);
     }
 
-    void positionChangedAnimal(Vector2d oldPosition, Vector2d newPosition){
+    void notifyObserversThatPositionChanged(Vector2d oldPosition, Vector2d newPosition){
         for (IPositionChangeObserver x: observers){
             x.positionChanged(oldPosition,newPosition);
         }

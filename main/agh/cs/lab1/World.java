@@ -13,10 +13,10 @@ public class World {
 
             MoveDirection[] directions = OptionParser.parse(args);
 
-            GrassField mapa = new GrassField(25);
+            GrassField mapa = new GrassField(5);
             mapa.place(new Animal(mapa,new Vector2d(1,1)));
             mapa.place(new Animal(mapa,new Vector2d(8,5)));
-            mapa.place(new Animal(mapa,new Vector2d(23,24)));
+            mapa.place(new Animal(mapa,new Vector2d(3,4)));
             mapa.place(new Animal(mapa,new Vector2d(3,5)));
             mapa.place(new Animal(mapa,new Vector2d(8,10)));
             mapa.place(new Animal(mapa,new Vector2d(3,18)));

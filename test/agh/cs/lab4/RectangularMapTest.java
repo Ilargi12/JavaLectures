@@ -1,3 +1,4 @@
+/*
 package agh.cs.lab4;
 
 import agh.cs.lab2.MoveDirection;
@@ -66,4 +67,4 @@ public class RectangularMapTest {
         assertEquals(new Vector2d(4,4),zwierzak3_3.getPosition());
         assertEquals(new Vector2d(5,4),zwierzak5_5.getPosition());
     }
-}
+}*/

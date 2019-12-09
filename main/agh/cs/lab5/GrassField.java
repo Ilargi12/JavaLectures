@@ -13,7 +13,7 @@ public class GrassField extends AbstractWorldMap {
     private Vector2d lowerLeft = null;
     private Vector2d upperRight = null;
     private Integer numberOfFields;
-    private MapBoundary boundries = new MapBoundary();
+
 
 
     public GrassField(Integer numberOfFields) {
@@ -97,17 +97,7 @@ public class GrassField extends AbstractWorldMap {
         Animal[] tmpAnimals = animals.values().toArray(new Animal[0]);
         for(int i= 0; i < directions.length; i++){
             int index = i%tmpAnimals.length;
-            animals.remove(tmpAnimals[index].getPosition());
             tmpAnimals[index].move(directions[i]);
-            animals.put(tmpAnimals[index].getPosition(),tmpAnimals[index]);
-
-            Vector2d cowPosition = tmpAnimals[index].getPosition();
-
-            if(getThatGrass(cowPosition) != null){
-                weeds.remove(getThatGrass(cowPosition).getPosition());
-                boundries.removeFromSet(getThatGrass(cowPosition).getPosition());
-                placeGrass();
-            }
         }
     }
 
@@ -117,9 +107,11 @@ public class GrassField extends AbstractWorldMap {
 
     @Override
     public void positionChanged(Vector2d oldPosition, Vector2d newPosition){ //positionChanged with eating grass
-        super.positionChanged(oldPosition,newPosition);
+        Animal zwierzak = animals.get(oldPosition);
+        animals.remove(oldPosition);
+        animals.put(newPosition,zwierzak);
 
-        if(getThatGrass(newPosition) != null){//zjadanie trawy
+        if(getThatGrass(newPosition) != null) {//eating grass
             weeds.remove(getThatGrass(newPosition).getPosition());
             boundries.removeFromSet(newPosition);
             placeGrass();

@@ -4,7 +4,7 @@ package agh.cs.lab4;
 import agh.cs.lab2.*;
 import agh.cs.lab5.AbstractWorldMap;
 
-public class RectangularMap extends AbstractWorldMap {
+public class RectangularMap  {
 
     private final Vector2d leftBottom;
     private final Vector2d rightUpper;
@@ -14,17 +14,15 @@ public class RectangularMap extends AbstractWorldMap {
         this.rightUpper = new Vector2d(width,height);
     }
 
-    @Override
+    /*@Override
     public boolean canMoveTo(Vector2d position) {
         return (super.canMoveTo(position) && position.follows(leftBottom) && position.precedes(rightUpper));
-    }
+    }*/
 
-    @Override
     protected Vector2d assignLowerLeft() {
         return leftBottom;
     }
 
-    @Override
     protected Vector2d assignUpperRight() {
         return rightUpper;
     }
